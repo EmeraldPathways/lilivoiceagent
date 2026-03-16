@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lili Voice Agent - AI News Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .features {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #333;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            background: #f8f9fa;
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .code-section {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            color: #fff;
+        }
+        
+        .code-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        pre {
+            background: #0f0f1a;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            color: #a5b3ce;
+        }
+        
+        .keyword { color: #c792ea; }
+        .string { color: #c3e88d; }
+        .function { color: #82aaff; }
+        .comment { color: #676e95; }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .tech-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Lili Voice Agent</h1>
+            <p>An intelligent AI News Assistant powered by Google's Agent Development Kit (ADK) and Gemini. Stay updated with the latest AI news through natural conversation.</p>
+            <div class="tech-stack">
+                <span class="tech-badge">🚀 Google ADK</span>
+                <span class="tech-badge">🧠 Gemini 2.5 Flash</span>
+                <span class="tech-badge">🔍 Google Search</span>
+                <span class="tech-badge">🐍 Python</span>
+            </div>
+            <a href="https://github.com/EmeraldPathways/lilivoiceagent" class="btn">View on GitHub</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+        </header>
+        
+        <section class="features" id="features">
+            <h2>✨ Features</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">📰</div>
+                    <h3>Latest AI News</h3>
+                    <p>Get real-time AI news updates powered by Google Search integration.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💬</div>
+                    <h3>Natural Conversations</h3>
+                    <p>Chat naturally with Gemini-powered conversational AI.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔎</div>
+                    <h3>Web Search</h3>
+                    <p>Intelligent search capabilities to find relevant AI news articles.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast & Efficient</h3>
+                    <p>Built with Google's ADK for optimal performance.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="code-section">
+            <h2>🚀 Quick Start</h2>
+            <pre><code><span class="comment"># Clone the repository</span>
+git clone https://github.com/EmeraldPathways/lilivoiceagent.git
+cd lilivoiceagent
+
+<span class="comment"># Set up virtual environment</span>
+python -m venv .venv
+source .venv/bin/activate  <span class="comment"># Windows: .venv\Scripts\activate</span>
+
+<span class="comment"># Install dependencies</span>
+pip install -r requirements.txt
+
+<span class="comment"># Set your Google API key</span>
+<span class="keyword">export</span> GOOGLE_API_KEY=<span class="string">"your-api-key"</span>
+
+<span class="comment"># Run the agent</span>
+adk web</code></pre>
+        </section>
+        
+        <section class="features">
+            <h2>🛠️ How It Works</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">1️⃣</div>
+                    <h3>Ask a Question</h3>
+                    <p>Ask about the latest AI news, trends, or specific topics.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">2️⃣</div>
+                    <h3>Smart Search</h3>
+                    <p>The agent uses Google Search to find relevant information.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">3️⃣</div>
+                    <h3>Get Answers</h3>
+                    <p>Gemini processes the results and provides a clear response.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Made with 💜 by <a href="https://github.com/EmeraldPathways">EmeraldPathways</a></p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">Powered by <a href="https://github.com/google/adk">Google ADK</a> & <a href="https://gemini.google.com">Gemini</a></p>
+    </footer>
+</body>
+</html>
