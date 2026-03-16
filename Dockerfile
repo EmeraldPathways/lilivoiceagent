@@ -1,4 +1,4 @@
-# Lili Voice Agent - Docker Container
+# Lili Voice Agent - Google ADK Web UI
 # Deploy to Google Cloud Run
 
 FROM python:3.11-slim
@@ -9,6 +9,7 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (for better caching)
@@ -25,11 +26,11 @@ COPY ai_news_agent_search/ ./ai_news_agent_search/
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Expose port (Gradio default)
-EXPOSE 7860
+# Expose port (Cloud Run default)
+EXPOSE 8080
 
 # Environment variable for Google Cloud Run
-ENV PORT=7860
+ENV PORT=8080
 
-# Run the application
-CMD python app.py
+# Run the ADK web interface
+CMD ["python", "app.py"]

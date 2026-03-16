@@ -1,200 +1,108 @@
-# 🚀 Deploy to Google Cloud Run
+# 🚀 Deploy Lili Voice Agent to Google Cloud Run
 
-This guide walks you through deploying Lili Voice Agent to **Google Cloud Run**.
+Deploy Google ADK's **built-in web UI** to Google Cloud Run.
 
-## 📋 Prerequisites
+## 📋 Your Setup
 
-1. **Google Cloud SDK** (`gcloud`) installed → [Install Guide](https://cloud.google.com/sdk/docs/install)
-2. **Google Cloud project** with billing enabled
-3. **Google API Key** from [Google AI Studio](https://makersuite.google.com/app/apikey)
-
-Your Project Details:
-- **Project ID:** `gen-lang-client-0797203816`
-- **Project Name:** LILI VOICE AGENT
-- **Project Number:** 1032078340716
+| Setting | Value |
+|---------|-------|
+| **Project ID** | `gen-lang-client-0797203816` |
+| **Secret Name** | `LiliVoiceAgent` (already created!) |
+| **Region** | `us-central1` |
+| **Web UI** | Google ADK's native web interface |
 
 ---
 
-## ⚡ Quick Deploy (One Command)
+## ⚡ Quick Deploy (Run This Now)
 
 ```bash
-# 1. Set your API key
-export GOOGLE_API_KEY="your-google-api-key-here"
-
-# 2. Authenticate with Google Cloud
+# 1. Authenticate with Google Cloud
 gcloud auth login
 gcloud config set project gen-lang-client-0797203816
 
-# 3. Run the deploy script
+# 2. Run the deploy script
 chmod +x deploy.sh
-./deploy.sh gen-lang-client-0797203816 us-central1
+./deploy.sh
 ```
 
-Your app will be live at: `https://lili-voice-agent-xxxxxxxxxx-uc.a.run.app`
+That's it! Your app will be live in ~3 minutes.
 
 ---
 
-## 📖 Step-by-Step Manual Deploy
+## 📖 What Gets Deployed
 
-### Step 1: Authenticate
+The **Google ADK native web UI** - the same interface you see when running `adk web` locally.
 
-```bash
-gcloud auth login
-gcloud config set project gen-lang-client-0797203816
-```
+Features:
+- 💬 Chat interface with your AI News Agent
+- 🔍 Built-in conversation history
+- ⚡ Real-time responses with Google Search
+- 🎨 Clean, professional UI
 
-### Step 2: Enable Required APIs
+---
 
-```bash
-gcloud services enable cloudbuild.googleapis.com
-gcloud services enable run.googleapis.com
-gcloud services enable secretmanager.googleapis.com
-```
+## 🔧 Manual Deploy (If Script Fails)
 
-### Step 3: Store API Key in Secret Manager
+### Step 1: Build
 
 ```bash
-# Create the secret
-echo -n "your-google-api-key" | gcloud secrets create google-api-key \
-    --data-file=- \
-    --project=gen-lang-client-0797203816
-
-# Verify it was created
-gcloud secrets list
-```
-
-### Step 4: Build and Deploy
-
-**Option A: Using Cloud Build (Recommended)**
-
-```bash
-export GOOGLE_API_KEY="your-api-key"
-
 gcloud builds submit \
-    --config=cloudbuild.yaml \
-    --substitutions=_GOOGLE_API_KEY=$GOOGLE_API_KEY \
+    --tag gcr.io/gen-lang-client-0797203816/lili-voice-agent:latest \
     --project=gen-lang-client-0797203816
 ```
 
-**Option B: Manual Docker Build**
+### Step 2: Deploy
 
 ```bash
-# Build the image
-gcloud builds submit --tag gcr.io/gen-lang-client-0797203816/lili-voice-agent:latest
-
-# Deploy to Cloud Run
 gcloud run deploy lili-voice-agent \
     --image gcr.io/gen-lang-client-0797203816/lili-voice-agent:latest \
     --region us-central1 \
     --platform managed \
     --allow-unauthenticated \
-    --set-secrets GOOGLE_API_KEY=google-api-key:latest \
-    --memory 1Gi \
-    --cpu 1
+    --set-secrets GOOGLE_API_KEY=LiliVoiceAgent:latest \
+    --memory 2Gi \
+    --cpu 1 \
+    --max-instances 5
 ```
 
 ---
 
-## 🔧 Configuration
+## ✅ Verify Your Secret
 
-### Environment Variables
+Your secret `LiliVoiceAgent` should contain your Google API key.
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GOOGLE_API_KEY` | Google API Key for Gemini access | Yes |
-| `PORT` | Port to run the app (default: 7860) | No |
-
-### Cloud Run Settings
-
-| Setting | Value | Description |
-|---------|-------|-------------|
-| Memory | 1 GiB | Recommended for AI workloads |
-| CPU | 1 | Standard allocation |
-| Concurrency | 80 | Max requests per instance |
-| Max Instances | 10 | Cost control |
-| Timeout | 300s | Request timeout |
-
----
-
-## 📁 Deployment Files
-
-| File | Purpose |
-|------|---------|
-| `Dockerfile` | Container definition |
-| `cloudbuild.yaml` | Cloud Build CI/CD pipeline |
-| `service.yaml` | Cloud Run service specification |
-| `deploy.sh` | One-command deployment script |
-
----
-
-## 🌐 Accessing Your App
-
-After deployment, you'll get a URL like:
-```
-https://lili-voice-agent-abc123-uc.a.run.app
-```
-
-### View Logs
+Verify it exists:
 ```bash
-gcloud logging tail "resource.type=cloud_run_revision AND resource.labels.service_name=lili-voice-agent" --project=gen-lang-client-0797203816
+gcloud secrets describe LiliVoiceAgent --project=gen-lang-client-0797203816
 ```
 
-### Update Deployment
+View the value (to confirm it's correct):
 ```bash
-# Make changes to code, then rebuild
-gcloud builds submit --config=cloudbuild.yaml --project=gen-lang-client-0797203816
-```
-
-### Delete Service
-```bash
-gcloud run services delete lili-voice-agent --region=us-central1 --project=gen-lang-client-0797203816
+gcloud secrets versions access latest --secret=LiliVoiceAgent --project=gen-lang-client-0797203816
 ```
 
 ---
 
-## 💰 Cost Estimation
+## 🌐 Access Your App
 
-Cloud Run pricing (as of 2024):
-- **Free Tier:** 2 million requests/month, 360,000 GB-seconds memory, 180,000 vCPU-seconds
-- **Beyond Free:** ~$0.00002400/vCPU-second + $0.00000250/GB-second
+After deployment, open the URL shown in the console. It looks like:
+```
+https://lili-voice-agent-xxxxx-uc.a.run.app
+```
 
-For low-traffic personal use: **$0 - $5/month**
+You'll see the **Google ADK Web UI** with your AI News Agent ready to chat!
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### Build Fails
-```bash
-# Check build logs
-gcloud builds list --project=gen-lang-client-0797203816
-gcloud builds log [BUILD_ID]
-```
-
-### App Won't Start
-```bash
-# Check service logs
-gcloud run services logs read lili-voice-agent --region=us-central1
-```
-
-### Secret Not Found
-```bash
-# Verify secret exists
-gcloud secrets versions list google-api-key --project=gen-lang-client-0797203816
-
-# Recreate if needed
-echo -n "your-api-key" | gcloud secrets create google-api-key --data-file=- --project=gen-lang-client-0797203816
-```
+| Issue | Fix |
+|-------|-----|
+| Build fails | Check `gcloud builds list --project=gen-lang-client-0797203816` |
+| App won't start | Check logs: `gcloud run logs read lili-voice-agent --region=us-central1` |
+| Secret not found | Verify: `gcloud secrets list --project=gen-lang-client-0797203816` |
+| Permission denied | Run `gcloud auth login` again |
 
 ---
 
-## 📚 Additional Resources
-
-- [Google Cloud Run Docs](https://cloud.google.com/run/docs)
-- [Cloud Build Docs](https://cloud.google.com/build/docs)
-- [Secret Manager Docs](https://cloud.google.com/secret-manager/docs)
-- [Gradio Deployment Guide](https://www.gradio.app/guides/deploying-gradio-apps)
-
----
-
-**Ready to deploy?** Run the Quick Deploy command above! 🚀
+**Ready?** Run the Quick Deploy command above! 🚀

@@ -1,5 +1,5 @@
 # Google Cloud Build configuration
-# Builds and deploys Lili Voice Agent to Cloud Run
+# Builds and deploys Lili Voice Agent with ADK Web UI to Cloud Run
 
 steps:
   # Build the container image
@@ -32,16 +32,18 @@ steps:
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
-      - '--set-env-vars'
-      - 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}'
+      - '--set-secrets'
+      - 'GOOGLE_API_KEY=LiliVoiceAgent:latest'
       - '--memory'
-      - '1Gi'
+      - '2Gi'
       - '--cpu'
       - '1'
       - '--concurrency'
-      - '80'
+      - '40'
       - '--max-instances'
-      - '10'
+      - '5'
+      - '--timeout'
+      - '300'
 
 # Store images in Google Container Registry
 images:
@@ -49,7 +51,4 @@ images:
   - 'gcr.io/$PROJECT_ID/lili-voice-agent:latest'
 
 # Timeout for the build
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 timeout: 600s
