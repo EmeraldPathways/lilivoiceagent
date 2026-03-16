@@ -1,0 +1,41 @@
+# Google Cloud Run Service Configuration
+# Alternative to gcloud CLI deployment
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: lili-voice-agent
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        # Set maximum instances to control costs
+        autoscaling.knative.dev/maxScale: "10"
+        # Enable Cloud Run's built-in traffic splitting
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - image: gcr.io/PROJECT_ID/lili-voice-agent:latest
+          ports:
+            - containerPort: 7860
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-api-key
+                  key: latest
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          startupProbe:
+            httpGet:
+              path: /
+              port: 7860
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3

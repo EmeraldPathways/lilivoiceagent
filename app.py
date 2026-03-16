@@ -158,4 +158,13 @@ with gr.Blocks(css=custom_css, theme=gr.themes.Soft()) as demo:
     clear_btn.click(clear_history, None, chatbot)
 
 if __name__ == "__main__":
-    demo.launch()
+    # Get port from environment variable (Cloud Run sets this)
+    port = int(os.environ.get("PORT", 7860))
+    
+    # Launch Gradio with Cloud Run compatible settings
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=port,
+        show_error=True,
+        show_api=False
+    )
